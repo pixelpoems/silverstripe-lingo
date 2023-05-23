@@ -48,8 +48,7 @@ class LingoMessageProvider extends SymfonyMessageProvider
         $arguments = $this->templateInjection($injection);
 
         // Pass to symfony translator
-        $result = $this->getTranslator()->trans($entity, $arguments, 'messages', $locale);
-
+        $result = $this->getTranslator()->trans($entity, $arguments, $locale);
         //See if we have a Lingo translation if none is found
         if ($entity === $result) {
             //$result = $this->getLingoValue($entity, $locale);
@@ -58,10 +57,11 @@ class LingoMessageProvider extends SymfonyMessageProvider
 
             if($result){
                 return $result;
+            }else{
+                // else Manually inject default if no translation found
+                $result = $this->getTranslator()->trans($default, $arguments, 'messages', $locale);
             }
-
-            // else Manually inject default if no translation found
-            $result = $this->getTranslator()->trans($default, $arguments, 'messages', $locale);
+            
         }
 
         return $result;
